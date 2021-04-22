@@ -11,7 +11,7 @@ app.get('/', function(req,res){
 })
 
 io.on('connection', function(socket){
-
+    console.log(game);
 });
 
 app.listen(3000, () => {   console.log('Example app listening at http://localhost:3000')});

@@ -23,3 +23,4 @@ function addPlayer(socketId){
 function removePlayer(socketId){
     delete game.players[socketId];
 }
+
