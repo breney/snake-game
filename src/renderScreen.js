@@ -16,5 +16,7 @@ export default function renderScreen(screen,game){
       screen.fillRect(fruits.x,fruits.y,20,20);
     }
     
-    requestAnimationFrame(screen(screen,game));
+    requestAnimationFrame(() => {
+        renderScreen(screen,game);
+    });
 }

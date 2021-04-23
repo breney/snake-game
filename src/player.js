@@ -1,5 +1,4 @@
 
-
 function handleKeyDown(event){
     var speed = 10;
     console.log('test');

@@ -10,6 +10,8 @@ nm_dependencies.forEach(dep => {   app.use(`/${dep}`, express.static(path.resolv
 
 app.set('io',io);
 
+app.use(express.static('src'))
+
 app.get('/', function(req,res){
     res.sendFile(__dirname + '/src/views/game.html');
 
