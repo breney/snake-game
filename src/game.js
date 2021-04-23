@@ -12,8 +12,8 @@ module.exports = {
     
         function addPlayer(socketId){
             return game.players[socketId] = {
-                x : (Math.random() * game.width),
-                y : (Math.random() * game.height)
+                x : Math.round((Math.random()   * game.width - 10),1),
+                y : Math.round((Math.random()  * game.height - 10),1)
             };
         }
     
@@ -21,6 +21,7 @@ module.exports = {
             delete game.players[socketId];
         }
 
+        
         return game;
     }
 }

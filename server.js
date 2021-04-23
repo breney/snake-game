@@ -8,7 +8,7 @@ var path = require('path');
 
 nm_dependencies.forEach(dep => {   app.use(`/${dep}`, express.static(path.resolve(`node_modules/${dep}`)))});
 
-console.log(game.width);
+app.set('io',io);
 
 app.get('/', function(req,res){
     res.sendFile(__dirname + '/src/views/game.html');
@@ -17,10 +17,18 @@ app.get('/', function(req,res){
 
 io.on('connection', function(socket){
     
+    console.log('connected');
+    game.addPlayer(socket.id);
+
+    socket.emit('setup', game);
+    
+    socket.on('disconnect', () => {
+        console.log('disconnect');
+        game.removePlayer(socket.id);
+    })
 });
 
-io.on('test' , function(){
-    console.log('test');
-})
 
-app.listen(3000, () => {   console.log('Example app listening at http://localhost:3000')});
+
+
+http.listen(3000, () => {   console.log('Example app listening at http://localhost:3000')});
