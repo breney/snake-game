@@ -40,7 +40,7 @@
 
       <script type='module'>
         import renderScreen from '../renderScreen.js';
-        import player from '../player.js';
+        import keyboardListener from '../keyboardListener.js';
         import createGame from '../game.js';
 
         var socket = io();
@@ -56,7 +56,12 @@
         socket.on('setup', (state) => {
             game.setState(state);
 
-        
+            keyboardListener.setPlayerId(socket.id);
+            keyboardListener.subscrive(game.handleKeyDown());
+            keyboardListener.subscrive( (command) => {
+              socket.emit('move-player', command)
+            })
+            
 
         })
 
@@ -66,7 +71,7 @@
         })
 
       
-        //document.addEventListener('keydown',handleKeyDown);
+        //
       
       </script>
 </body>

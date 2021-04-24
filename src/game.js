@@ -44,11 +44,33 @@ export default function createGame(){
         delete state.players[command.playerId];
     }
 
+    function handleKeyDown(event){
+        var speed = 10;
+        console.log('test');
+        if(event.key == 'ArrowUp' && currentPlayer.y - speed > 0){
+          currentPlayer.y -=speed;
+          return
+        }
+        if(event.key == 'ArrowDown' && currentPlayer.y + speed < height - 20){
+          currentPlayer.y +=speed;
+          return
+        }
+        if(event.key == 'ArrowRight' && currentPlayer.x + speed < width - 20 ){
+          currentPlayer.x +=speed;
+          return
+        }
+        if(event.key == 'ArrowLeft' && currentPlayer.x - speed > 0){
+          currentPlayer.x -=speed;
+          return
+        }
+      }
+
     
     return {
         setState,
         addPlayer,
         removePlayer,
+        handleKeyDown,
         state
     }
 }
