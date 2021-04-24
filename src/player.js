@@ -1,5 +1,25 @@
+export default function player(){
 
-function handleKeyDown(event){
+  var state = {
+      observers: [],
+      playerId: null
+  }
+  
+  function setPlayerId(playerId){
+    state.playerId = playerId;
+  }
+
+  function subscrive(command){
+    state.observers.push(command);
+  }
+
+  function notifyAll(command){
+    for(var observerFunction in observers){
+      observerFunction(command);
+    }
+  }
+
+  function handleKeyDown(event){
     var speed = 10;
     console.log('test');
     if(event.key == 'ArrowUp' && currentPlayer.y - speed > 0){
@@ -21,9 +41,21 @@ function handleKeyDown(event){
   } 
 
   function score() {
-      console.log('score');
+    console.log('score');
   }
 
   function collectFruit(){
-      console.log('collect fruit');
+    console.log('collect fruit');
   }
+
+  return {
+    handleKeyDown,
+    score,
+    collectFruit
+  }
+}
+
+
+
+
+  

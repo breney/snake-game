@@ -40,14 +40,31 @@
 
       <script type='module'>
         import renderScreen from '../renderScreen.js';
-      
+        import player from '../player.js';
+        import createGame from '../game.js';
+
         var socket = io();
-        
+        var game = createGame();
+        var currentPlayer = player();
         var myScreen = document.getElementById("myScreen").getContext('2d');
         
-        renderScreen(myScreen, {});
+
+        socket.on('connect', () => {
+          renderScreen(myScreen, game,requestAnimationFrame,socket.id);
+        })
         
-       
+        socket.on('setup', (state) => {
+            game.setState(state);
+
+        
+
+        })
+
+        socket.on('add-player', (command) => {
+            console.log('1' + command);
+            game.addPlayer(command);
+        })
+
       
         //document.addEventListener('keydown',handleKeyDown);
       
