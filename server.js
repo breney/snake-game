@@ -13,6 +13,7 @@ var game = createGame();
 var __dirname = path.resolve();
 
 game.subscrive( (command) => {
+    console.log(`> Emitting ${command.type}`);
     socket.emit(command.type, command);
 })
 
@@ -34,6 +35,12 @@ socket.on('connection', function(io){
     io.on('disconnect', () => {
         console.log('disconnect');
         game.removePlayer({playerId : io.id});
+    })
+
+    io.on('move-player', (command) => {
+        command.type = "move-player";
+        command.playerId = io.id;
+        game.handleKeyDown(command);
     })
 });
 

@@ -25,11 +25,14 @@ export default function createGame(){
     }
 
     function addPlayer(command){
+
         var playerId = command.playerId;
-  
+        var playerX = 'playerX' in command ? command.playerX : Math.round(Math.random()   * state.screen.width);
+        var playerY = 'playerY' in command ? command.playerY :  Math.round(Math.random()  * state.screen.height);
+
         state.players[playerId] = {
-            x : Math.round((Math.random()   * state.screen.width - 10),1),
-            y : Math.round((Math.random()  * state.screen.height - 10),1)
+            x : playerX,
+            y : playerY
         };
 
         notifyAll({
@@ -42,29 +45,36 @@ export default function createGame(){
 
     function removePlayer(command){
         delete state.players[command.playerId];
+
+        notifyAll({
+            type : 'remove-player',
+            playerId: command.playerId
+        })
     }
 
     function handleKeyDown(command){
-        notifyAll(command);
         var speed = 10;
+ 
+        notifyAll(command);
+     
         var currentPlayer = state.players[command.playerId];
-        console.log(command.keyPressed);
+
         if(command.keyPressed == 'ArrowUp' && currentPlayer.y - speed > 0){
           currentPlayer.y -=speed;
-          return
         }
-        if(command.keyPressed == 'ArrowDown' && currentPlayer.y + speed < 500 - 20){
+        if(command.keyPressed == 'ArrowDown' && currentPlayer.y + speed < state.screen.width - 20){
           currentPlayer.y +=speed;
-          return
         }
-        if(command.keyPressed == 'ArrowRight' && currentPlayer.x + speed < 500 - 20 ){
+        if(command.keyPressed == 'ArrowRight' && currentPlayer.x + speed < state.screen.width - 20 ){
           currentPlayer.x +=speed;
-          return
         }
         if(command.keyPressed == 'ArrowLeft' && currentPlayer.x - speed > 0){
           currentPlayer.x -=speed;
-          return
         }
+        console.log('x' + currentPlayer.x + ' y ' + currentPlayer.y);
+        
+        
+       
       }
 
     
