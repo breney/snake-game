@@ -10,6 +10,12 @@ export default function createGame(){
 
     var observers = [];
 
+    function startGame(){
+        var interval = 5000;
+
+        setInterval(spawnFruits,interval);
+    }
+
     function subscrive(observerFunction){
         observers.push(observerFunction);
     }
@@ -71,19 +77,66 @@ export default function createGame(){
         if(command.keyPressed == 'ArrowLeft' && currentPlayer.x - speed > 0){
           currentPlayer.x -=speed;
         }
-        console.log('x' + currentPlayer.x + ' y ' + currentPlayer.y);
-        
+
+        checkColision(command);
+      }
+
+      function spawnFruits(command){
+
+        var fruitId = command ? command.fruitId : Math.floor(Math.random() * 1000)
+        var fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width - 50);
+        var fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height - 50);
+
+        console.log(!state.fruits.length);
+
+        state.fruits[fruitId] = {
+            x: fruitX,
+            y: fruitY
+        }
         
        
-      }
+        notifyAll({
+            type: "add-fruit",
+            fruitId: fruitId,
+            fruitX: fruitX,
+            fruitY: fruitY
+        })
+    }
+
+    function removeFruit(command){
+        delete state.fruits[command.fruitId];
+
+        notifyAll({
+            type : 'remove-fruit',
+            fruitId : command.fruitId
+        });
+    }
+
+    function checkColision(command){
+
+        var currentPlayer = state.players[command.playerId];
+
+        for(var fruitId in state.fruits){
+            var fruit = state.fruits[fruitId];
+            if(currentPlayer.x >= fruit.x - 10 && currentPlayer.x <= fruit.x +10){
+                if(currentPlayer.y >= fruit.y - 10 && currentPlayer.y <= fruit.y + 10 ){
+                    removeFruit({fruitId : fruitId});
+                }
+            }
+        }
+        
+    }
 
     
     return {
+        startGame,
         subscrive,
         setState,
         addPlayer,
         removePlayer,
         handleKeyDown,
+        removeFruit,
+        spawnFruits,
         state
     }
 }

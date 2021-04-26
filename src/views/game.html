@@ -52,6 +52,8 @@
           renderScreen(myScreen, game,requestAnimationFrame,socket.id);
         })
         
+        game.spawnFruits({});
+
         socket.on('setup', (state) => {
             game.setState(state);
             
@@ -74,6 +76,14 @@
           if(socket.id !== command.playerId){
             game.handleKeyDown(command);   
           }                      
+        })
+
+        socket.on('add-fruit', (command) => {
+          game.spawnFruits(command);
+        })
+
+        socket.on('remove-fruit', (command) => {
+          game.removeFruit(command);
         })
 
       

@@ -2,6 +2,7 @@ export default function renderScreen(screen,game,requestAnimationFrame,socketId)
     
     screen.fillStyle = " #f0f0f5";
     screen.fillRect(0, 0, game.state.screen.width, game.state.screen.height);
+
     var currentPlayer = game.state.players[socketId];
 
     for(var playerId in game.state.players){
@@ -10,10 +11,10 @@ export default function renderScreen(screen,game,requestAnimationFrame,socketId)
       screen.fillRect(player.x,player.y,20,20);   
     }
 
-    for(var fruit in game.fruits){
-      var fruits = game.fruits[fruit];
-      screen.fillStyle = '#99ff99'
-      screen.fillRect(fruits.x,fruits.y,20,20);
+    for(var fruitId in game.state.fruits){
+      var fruit = game.state.fruits[fruitId];
+      screen.fillStyle = '#00ff00'
+      screen.fillRect(fruit.x,fruit.y,20,20);
     }
 
     if(currentPlayer){

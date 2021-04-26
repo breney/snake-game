@@ -17,6 +17,8 @@ game.subscrive( (command) => {
     socket.emit(command.type, command);
 })
 
+game.startGame();
+
 app.use(express.static('src'))
 
 app.get('/', function(req,res){
