@@ -5,7 +5,13 @@ export default function renderScreen(screen,game,requestAnimationFrame,socketId)
 
     for(var playerId in game.state.players){
       var player = game.state.players[playerId];
-      screen.fillStyle = '#ff9999'
+
+      if(game.state.players[socketId]){
+        screen.fillStyle = "#0000ff"; 
+      }else{
+        screen.fillStyle = '#ff9999';
+      }
+     
       screen.fillRect(player.x,player.y,20,20);   
     }
 
@@ -14,6 +20,8 @@ export default function renderScreen(screen,game,requestAnimationFrame,socketId)
       screen.fillStyle = '#99ff99'
       screen.fillRect(fruits.x,fruits.y,20,20);
     }
+
+    
     
     requestAnimationFrame(() => {
       renderScreen(screen,game,requestAnimationFrame,socketId);

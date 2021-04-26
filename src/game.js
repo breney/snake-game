@@ -15,9 +15,9 @@ export default function createGame(){
     }
 
     function notifyAll(command){
-        for(observerFunction in observers){
+        observers.forEach(function(observerFunction){
             observerFunction(command);
-        }
+        })
     }
 
     function setState(newState) {
@@ -44,22 +44,24 @@ export default function createGame(){
         delete state.players[command.playerId];
     }
 
-    function handleKeyDown(event){
+    function handleKeyDown(command){
+        notifyAll(command);
         var speed = 10;
-        console.log('test');
-        if(event.key == 'ArrowUp' && currentPlayer.y - speed > 0){
+        var currentPlayer = state.players[command.playerId];
+        console.log(command.keyPressed);
+        if(command.keyPressed == 'ArrowUp' && currentPlayer.y - speed > 0){
           currentPlayer.y -=speed;
           return
         }
-        if(event.key == 'ArrowDown' && currentPlayer.y + speed < height - 20){
+        if(command.keyPressed == 'ArrowDown' && currentPlayer.y + speed < 500 - 20){
           currentPlayer.y +=speed;
           return
         }
-        if(event.key == 'ArrowRight' && currentPlayer.x + speed < width - 20 ){
+        if(command.keyPressed == 'ArrowRight' && currentPlayer.x + speed < 500 - 20 ){
           currentPlayer.x +=speed;
           return
         }
-        if(event.key == 'ArrowLeft' && currentPlayer.x - speed > 0){
+        if(command.keyPressed == 'ArrowLeft' && currentPlayer.x - speed > 0){
           currentPlayer.x -=speed;
           return
         }
@@ -67,6 +69,7 @@ export default function createGame(){
 
     
     return {
+        subscrive,
         setState,
         addPlayer,
         removePlayer,

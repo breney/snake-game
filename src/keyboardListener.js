@@ -10,13 +10,13 @@ export default function keyboardListener(){
   }
 
   function subscrive(command){
-    stateobservers.push(command);
+    state.observers.push(command);
   }
 
   function notifyAll(command){
-    for(var observerFunction in observers){
+    state.observers.forEach(function(observerFunction) {
       observerFunction(command);
-    }
+    })
   }
  
   document.addEventListener('keydown',handleKeyDown);

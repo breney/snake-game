@@ -45,7 +45,7 @@
 
         var socket = io();
         var game = createGame();
-        var currentPlayer = player();
+        var keyboard = keyboardListener();
         var myScreen = document.getElementById("myScreen").getContext('2d');
         
 
@@ -56,10 +56,10 @@
         socket.on('setup', (state) => {
             game.setState(state);
 
-            keyboardListener.setPlayerId(socket.id);
-            keyboardListener.subscrive(game.handleKeyDown());
-            keyboardListener.subscrive( (command) => {
-              socket.emit('move-player', command)
+            keyboard.setPlayerId(socket.id);
+            keyboard.subscrive(game.handleKeyDown);
+            keyboard.subscrive( (command) => {
+              socket.emit(command.type, command)
             })
             
 
@@ -68,6 +68,11 @@
         socket.on('add-player', (command) => {
             console.log('1' + command);
             game.addPlayer(command);
+        })
+
+        socket.on('move-player', (command) => {
+          console.log('moving ...');
+          game.handleKeyDown(command.keyPressed);
         })
 
       

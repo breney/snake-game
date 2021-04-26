@@ -12,6 +12,9 @@ var socket = new io.Server(server)
 var game = createGame();
 var __dirname = path.resolve();
 
+game.subscrive( (command) => {
+    socket.emit(command.type, command);
+})
 
 app.use(express.static('src'))
 
