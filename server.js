@@ -17,7 +17,7 @@ game.subscrive( (command) => {
     socket.emit(command.type, command);
 })
 
-game.startGame();
+
 
 app.use(express.static('src'))
 
@@ -25,6 +25,9 @@ app.get('/', function(req,res){
     res.sendFile( __dirname +'/src/views/game.html');
 
 })
+/* 
+
+game.startGame();
 
 socket.on('connection', function(io){
     
@@ -46,7 +49,7 @@ socket.on('connection', function(io){
     })
 });
 
-
+*/
 
 
 server.listen(3000, () => {   console.log('Example app listening at http://localhost:3000')});
