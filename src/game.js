@@ -11,7 +11,7 @@ export default function createGame(){
     var observers = [];
 
     function startGame(){
-        var interval = 5000;
+        var interval = 1000;
 
         setInterval(spawnFruits,interval);
     }
@@ -84,8 +84,8 @@ export default function createGame(){
       function spawnFruits(command){
 
         var fruitId = command ? command.fruitId : Math.floor(Math.random() * 1000)
-        var fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width - 50);
-        var fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height - 50);
+        var fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width - 150);
+        var fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height - 150);
 
         console.log(!state.fruits.length);
 
