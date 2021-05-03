@@ -1,0 +1,42 @@
+  footer{
+    bottom: 0;
+    right:0;
+    left:0;
+    position: fixed;
+    text-align: center;
+  }
+
+  #myScreen{
+    border:5px solid #3385ff;
+  }
+  header{
+    position: fixed;
+    top:0;
+    width: 100%;
+  }
+  #gameBox {
+    top: 0;
+    right:0;
+    left:0;
+    bottom:0;
+    position: absolute;
+    margin: auto;
+    width: 50rem;
+    height: 33rem;
+    border: 3px solid black;
+    border-radius:20px;
+  } 
+  .row {
+    height:100%;
+    align-content: center;
+    text-align: center;
+  }
+  .table{
+    width:200px;
+  }
+  body{
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-weight: 700;
+    color: white;
+    background-color: #1abc9c
+  }

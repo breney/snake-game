@@ -6,155 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Shit Type</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="../views/game.css">
     <script src="/socket.io/socket.io.js"></script>
 
 </head>
 <body class="">
-  
-        <header class="cover-container d-flex pt-3 pb-3 flex-column bg-dark">     
-            <div class="container">
-              <h3 class="float-md-start  text-white ">Snake game</h3>
-            </div>         
-        </header>
 
-        <div id="gameBox" class="container bg-white">
-          <div class="row">
-            <div class="col-md-2 text-dark">
-                       
-              <table class="table">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Top 10 Ranking</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-md-6 text-dark ">  
-              <canvas id="myScreen" width='400' height='400' ></canvas>      
-            </div>
-            <div class="col-md-4 text-dark">
-              ola
-            </div>
-          </div>
-        </div>
-  
-          <footer >
-            <p>Copyright &copy; breney 2021</p>
-          </footer>
+  <header class="cover-container d-flex pt-3 pb-3 flex-column bg-dark">     
+    <div class="container">
+      <h3 class="float-md-start  text-white ">Snake game</h3>
+    </div>         
+  </header>
+
+  <div id="gameBox" class="container bg-white">
+    <div class="row">
+      <div class="col-md-8 text-dark ">  
+        <canvas id="myScreen" width='400' height='400' ></canvas>      
+      </div>
+      <div class="col-md-4 text-dark d-flex">              
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Top 10 Ranking</th>
+            </tr>
+          </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+   </div>
+
+  <footer >
+    <p>Copyright &copy; breney 2021</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+
+  <script type='module'>
+    import renderScreen from '../renderScreen.js';
+    import keyboardListener from '../keyboardListener.js';
+    import createGame from '../game.js';
+
+    var socket = io();
+    var game = createGame();
+    var keyboard = keyboardListener();
+    var myScreen = document.getElementById("myScreen").getContext('2d');
         
-  
-      
-      
-
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
-
-      <script type='module'>
-        import renderScreen from '../renderScreen.js';
-        import keyboardListener from '../keyboardListener.js';
-        import createGame from '../game.js';
-
-        var socket = io();
-        var game = createGame();
-        var keyboard = keyboardListener();
-        var myScreen = document.getElementById("myScreen").getContext('2d');
+    socket.on('connect', () => {
+      renderScreen(myScreen, game,requestAnimationFrame,socket.id);
+    })
         
-        socket.on('connect', () => {
-          renderScreen(myScreen, game,requestAnimationFrame,socket.id);
-        })
-        
-        game.spawnFruits({});
+    game.spawnFruits({});
 
-        socket.on('setup', (state) => {
-            game.setState(state);
+    socket.on('setup', (state) => {
+      game.setState(state);
             
-            keyboard.setPlayerId(socket.id);
-            keyboard.subscrive(game.handleKeyDown);
-            keyboard.subscrive( (command) => {
-              socket.emit(command.type, command)
-            })
-        })
+      keyboard.setPlayerId(socket.id);
+      keyboard.subscrive(game.handleKeyDown);
+      keyboard.subscrive( (command) => {
+        socket.emit(command.type, command)
+      })
+    })
 
-        socket.on('add-player', (command) => {
-          game.addPlayer(command);
-         })
+    socket.on('add-player', (command) => {
+      game.addPlayer(command);
+    })
 
-        socket.on('remove-player', (command) => {
-           game.removePlayer(command);
-        })
+    socket.on('remove-player', (command) => {
+      game.removePlayer(command);
+    })
 
-        socket.on('move-player', (command) => {  
-          if(socket.id !== command.playerId){
-            game.handleKeyDown(command);   
-          }                      
-        })
+    socket.on('move-player', (command) => {  
+      if(socket.id !== command.playerId){
+        game.handleKeyDown(command);   
+      }                      
+    })
 
-        socket.on('add-fruit', (command) => {
-          game.spawnFruits(command);
-        })
+    socket.on('add-fruit', (command) => {
+      game.spawnFruits(command);
+    })
 
-        socket.on('remove-fruit', (command) => {
-          game.removeFruit(command);
-        })
-
-      
-        //
-      
-      </script>
+    socket.on('remove-fruit', (command) => {
+      game.removeFruit(command);
+    })
+  </script>
 </body>
-<style>
-  footer{
-    bottom: 0;
-    right:0;
-    left:0;
-    position: fixed;
-    text-align: center;
-  }
-
-  #myScreen{
-    border:5px solid #3385ff;
-  }
-  header{
-    position: fixed;
-    top:0;
-    width: 100%;
-  }
-  #gameBox {
-    top: 0;
-    right:0;
-    left:0;
-    bottom:0;
-    position: absolute;
-    margin: auto;
-    width: 150rem;
-    height: 33rem;
-    border: 3px solid black;
-    border-radius:20px;
-  }
-
-  .row {
-    height:100%;
-    align-content: center;
-    text-align: center;
-  }
-  .table{
-    margin-left: 50px;
-  }
-  body{
-    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    font-weight: 700;
-    color: white;
-    background-color: #1abc9c
-  }
-
-</style>
-
-
-
 </html>
