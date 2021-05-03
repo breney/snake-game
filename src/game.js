@@ -3,15 +3,15 @@ export default function createGame(){
         players: {},
         fruits: {},
         screen: {
-            width: 500,
-            height: 500
+            width: 400,
+            height: 400
         }
     }
 
     var observers = [];
 
     function startGame(){
-        var interval = 1000;
+        var interval = 100000;
 
         setInterval(spawnFruits,interval);
     }
@@ -47,6 +47,11 @@ export default function createGame(){
             playerX: state.players[playerId].x,
             playerY: state.players[playerId].y
         })
+
+        notifyAll({
+            type : 'update-player',
+            game: state
+        })
     }
 
     function removePlayer(command){
@@ -56,6 +61,16 @@ export default function createGame(){
             type : 'remove-player',
             playerId: command.playerId
         })
+
+        notifyAll({
+            type : 'update-player',
+            game: state
+        })
+    }
+
+    function updatePlayer(command){
+        state = command.game;
+        console.log(state);
     }
 
     function handleKeyDown(command){
@@ -134,6 +149,7 @@ export default function createGame(){
         setState,
         addPlayer,
         removePlayer,
+        updatePlayer,
         handleKeyDown,
         removeFruit,
         spawnFruits,

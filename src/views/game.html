@@ -11,30 +11,31 @@
 
 </head>
 <body class="">
-
   <header class="cover-container d-flex pt-3 pb-3 flex-column bg-dark">     
     <div class="container">
       <h3 class="float-md-start  text-white ">Snake game</h3>
     </div>         
   </header>
 
+  <div id="contentBox" >
+    <img src="https://images.vexels.com/media/users/3/127788/isolated/preview/441998fd337f4fbfe4e568d5bc909b4f-funny-snake-cartoon-character-by-vexels.png" width="350" height="350">
+    <table class="table" id="playersOnline"></table>
+  </div>
+
   <div id="gameBox" class="container bg-white">
     <div class="row">
       <div class="col-md-8 text-dark ">  
-        <canvas id="myScreen" width='400' height='400' ></canvas>      
+        <canvas id="myScreen" width='400' height='400' ></canvas>   
+        <button type="button" onclick="addRow()">ADD ROW</button>   
       </div>
       <div class="col-md-4 text-dark d-flex">              
-        <table class="table">
-          <thead class="thead-light">
-            <tr>
-              <th>Top 10 Ranking</th>
-            </tr>
-          </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-              </tr>
-          </tbody>
+        <table class="table table-width">
+          <tr class="thead-light">
+            <th>Top 10 Ranking</th>
+          </tr>
+          <tr>
+            <td>1</td>
+          </tr>
         </table>
       </div>
     </div>
@@ -51,21 +52,23 @@
     import renderScreen from '../renderScreen.js';
     import keyboardListener from '../keyboardListener.js';
     import createGame from '../game.js';
-
+    
+    var playersOnlineTable = document.getElementById('playersOnline');
     var socket = io();
     var game = createGame();
     var keyboard = keyboardListener();
     var myScreen = document.getElementById("myScreen").getContext('2d');
-        
+
     socket.on('connect', () => {
       renderScreen(myScreen, game,requestAnimationFrame,socket.id);
     })
-        
+    
     game.spawnFruits({});
 
     socket.on('setup', (state) => {
       game.setState(state);
-            
+      updatePlayersOnline();
+
       keyboard.setPlayerId(socket.id);
       keyboard.subscrive(game.handleKeyDown);
       keyboard.subscrive( (command) => {
@@ -75,6 +78,12 @@
 
     socket.on('add-player', (command) => {
       game.addPlayer(command);
+    })
+
+    socket.on('update-player', (command) => {
+ 
+      console.log(command.game);
+      
     })
 
     socket.on('remove-player', (command) => {
@@ -88,12 +97,22 @@
     })
 
     socket.on('add-fruit', (command) => {
-      game.spawnFruits(command);
+      game.spawnFruits(command); 
     })
 
     socket.on('remove-fruit', (command) => {
       game.removeFruit(command);
     })
+
+    function updatePlayersOnline(){
+      playersOnlineTable.innerHTML = '<tr><th>Online Players</th></tr>';
+        for(var playerId in game.state.players){
+          var player = game.state.players[playerId];
+          playersOnlineTable.innerHTML += `<tr><td>ola</td></tr>`;
+        }
+    }
+
   </script>
+  
 </body>
 </html>

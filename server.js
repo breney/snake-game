@@ -25,15 +25,19 @@ app.get('/', function(req,res){
     res.sendFile( __dirname +'/src/views/game.html');
 
 })
-/* 
+
 
 game.startGame();
 
 socket.on('connection', function(io){
     
-    console.log('connected');
+    var playerName = io.id;
+
+    io.on('playerName', (name) =>{
+        playerName = name;
+    })
     
-    game.addPlayer({playerId : io.id});
+    game.addPlayer({playerId : playerName});
 
     io.emit('setup', game.state);
     
@@ -49,7 +53,7 @@ socket.on('connection', function(io){
     })
 });
 
-*/
+
 
 
 server.listen(3000, () => {   console.log('Example app listening at http://localhost:3000')});
